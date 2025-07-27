@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:perkey/core/styles/colors.dart';
 import 'package:perkey/core/widgets/primary_container.dart';
+import 'package:perkey/features/influencer/views/influencer_home_view.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoView extends StatefulWidget {
@@ -10,77 +11,62 @@ class VideoView extends StatefulWidget {
   State<VideoView> createState() => _VideoViewState();
 }
 
-class _VideoViewState extends State<VideoView>
-    with SingleTickerProviderStateMixin {
+class _VideoViewState extends State<VideoView> with TickerProviderStateMixin {
   late VideoPlayerController _videoPlayerController;
-  bool _showNextScreen = false;
-  late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
+  // late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late AnimationController _scaleAnimationController;
 
   @override
   void initState() {
     super.initState();
+
     _videoPlayerController = VideoPlayerController.asset(
         'assets/videos/video.mp4',
       )
       ..initialize().then((_) {
         _videoPlayerController.play();
-        _videoPlayerController.setLooping(true); // Loop the video
-        _videoPlayerController.setVolume(50); // Mute the video
+        _videoPlayerController.setLooping(true);
+        _videoPlayerController.setVolume(0.0); // Mute the video
         setState(() {}); // Rerender to show the video
       });
 
-    _animationController = AnimationController(
+    _scaleAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(microseconds: 1500),
+      duration: const Duration(seconds: 2),
     );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1), // Starts off-screen at the bottom
-      end: Offset.zero, // Slides up to cover the screen
+    _scaleAnimation = Tween<double>(
+      begin: 0.0, // Starts fully transparent
+      end: 100, // Fades to 50% opacity
     ).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+      CurvedAnimation(parent: _scaleAnimationController, curve: Curves.easeOut),
     );
   }
 
   @override
   void dispose() {
     _videoPlayerController.dispose();
-    _animationController.dispose();
+    // _animationController.dispose();
+    _scaleAnimationController.dispose();
     super.dispose();
   }
 
-  void _handleTap() {
-    setState(() {
-      _showNextScreen = true;
-      _animationController.forward(); // Start the slide-up animation
-    });
+  void _handleTap(Widget destination) async {
+    // _scaleAnimationController.forward();
 
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _videoPlayerController.pause();
-        // Navigator.of(context)
-        //     .push(
-        //   PageRouteBuilder(
-        //     pageBuilder: (context, animation, secondaryAnimation) =>
-        //         const HomeView(),
-        //     transitionsBuilder:
-        //         (context, animation, secondaryAnimation, child) {
-        //       return FadeTransition(
-        //           opacity: animation, child: child); // Or any other transition
-        //     },
-        //   ),
-        // )
-        //       .then((_) {
-        //     // When returning from NextScreen, reset the animation
-        //     setState(() {
-        //       _showNextScreen = false;
-        //     });
-        //     _animationController.reverse(); // Slide the NextScreen back down
-        //     _videoPlayerController.play(); // Resume video if it was paused
-        //   });
-      }
-    });
+    await Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => destination,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+
+    // 3. When returning from the destination screen, reverse the fade animation
+    //  _animationController.reverse();
+    _scaleAnimationController.dispose();
+    _videoPlayerController.play(); // Resume video
   }
 
   @override
@@ -114,67 +100,53 @@ class _VideoViewState extends State<VideoView>
               ),
             ),
           ),
-          Container(color: Colors.white.withAlpha(125)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height / 1.5),
-                PrimaryContainer(text: 'Influencer'),
-                SizedBox(height: 10),
-                PrimaryContainer(
-                  text: 'Business',
-                  color: kSecondaryColor,
-                  textColor: kOnSecondaryColor,
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _handleTap(InfluencerHomeView()),
+                      behavior: HitTestBehavior.translucent,
+                      child: const PrimaryContainer(text: 'Influencer'),
+                    ),
+                    AnimatedBuilder(
+                      animation: _scaleAnimation,
+                      builder:
+                          (c, child) => Transform.scale(
+                            scale: _scaleAnimation.value,
+                            child: child,
+                          ),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap:
+                      () => _handleTap(
+                        const Text('Business Home View'),
+                      ), // Replace with actual BusinessHomeView()
+                  behavior: HitTestBehavior.translucent,
+                  child: const PrimaryContainer(
+                    text: 'Business',
+                    color: kSecondaryColor,
+                    textColor: kOnSecondaryColor,
+                  ),
                 ),
               ],
             ),
           ),
-          // Gradient Overlay for better readability and tap area indication
-          // Align(
-          //   alignment: Alignment.topLeft,
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(20.0),
-          //     child: SizedBox(
-          //       width: 300,
-          //       height: 300,
-          //       child: Image.asset('assets/images/logo.png'),
-          //     ),
-          //   ),
-          // ),
-          // Tap Detector for the video screen
-          // GestureDetector(
-          //   onTap: _handleTap,
-          //   behavior:
-          //       HitTestBehavior
-          //           .translucent, // Ensures taps are registered even on transparent parts
-          //   child: const Center(
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.end,
-          //       children: [
-          //         Padding(
-          //           padding: EdgeInsets.only(bottom: 50.0),
-          //           child: Icon(
-          //             Icons.keyboard_arrow_up,
-          //             color: Colors.white,
-          //             size: 60,
-          //           ),
-          //         ),
-          //         Text(
-          //           'Tap to Play and win',
-          //           style: TextStyle(color: Colors.white, fontSize: 18),
-          //         ),
-          //         SizedBox(height: 50),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          if (_showNextScreen)
-            SlideTransition(
-              position: _slideAnimation,
-              // child: const HomeView(),
-            ),
         ],
       ),
     );
