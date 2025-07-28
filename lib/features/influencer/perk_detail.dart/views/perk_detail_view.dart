@@ -1,16 +1,13 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:overlapped_carousel/overlapped_carousel.dart';
 import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/styles/colors.dart';
 import 'package:perkey/core/styles/text_styles.dart';
 import 'package:perkey/core/widgets/build_info_chip.dart';
 
 class PerkDetailView extends StatelessWidget {
-  PerkDetailView({super.key, required this.perk});
+  const PerkDetailView({super.key, required this.perk});
   final Map<String, dynamic> perk;
 
   @override
