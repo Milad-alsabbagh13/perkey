@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/styles/colors.dart';
 
-class PerkContainer extends StatelessWidget {
-  const PerkContainer({super.key, required this.perk});
+class PerkCard extends StatelessWidget {
+  const PerkCard({super.key, required this.perk});
   final Map<String, dynamic> perk;
 
   @override
@@ -19,10 +20,10 @@ class PerkContainer extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
-              color: kPrimaryColor,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage(perk['images'][0]),
+                image: NetworkImage(perk[DataBaseConstants.kImagesKey][0]),
                 fit: BoxFit.cover,
               ),
             ),
@@ -41,11 +42,20 @@ class PerkContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      perk['title'],
-                      maxLines: 2,
+                      perk[DataBaseConstants.kBusinessNameKey],
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      perk[DataBaseConstants.kOfferKey],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
                         fontSize: 16,
                       ),
                     ),
@@ -53,21 +63,22 @@ class PerkContainer extends StatelessWidget {
                     Row(
                       children: [
                         SvgPicture.asset(
-                          perk['requirement'] == 'Facebook'
+                          perk[DataBaseConstants.kRequirementKey] == 'Facebook'
                               ? 'assets/icons/facebook.svg'
                               : 'assets/icons/instagram.svg',
                           width: 20,
                           height: 20,
                         ),
                         Text(
-                          perk['requirement'] == 'instagram'
+                          perk[DataBaseConstants.kRequirementKey] == 'instagram'
                               ? 'Instagram post'
                               : 'Facebook post',
+                          style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                     Text(
-                      perk['desc'],
+                      perk[DataBaseConstants.kDescriptionKey],
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
@@ -79,9 +90,18 @@ class PerkContainer extends StatelessWidget {
                       MainAxisAlignment
                           .spaceBetween, // Distribute space between elements
                   children: [
-                    _buildInfoChip(Icons.calendar_today, perk['date']),
-                    _buildInfoChip(Icons.access_time, perk['time']),
-                    _buildInfoChip(Icons.location_on, perk['location']),
+                    _buildInfoChip(
+                      Icons.calendar_today,
+                      perk[DataBaseConstants.kDateKey],
+                    ),
+                    _buildInfoChip(
+                      Icons.access_time,
+                      perk[DataBaseConstants.kTimeKey],
+                    ),
+                    _buildInfoChip(
+                      Icons.location_on,
+                      perk[DataBaseConstants.kLocationKey],
+                    ),
                   ],
                 ),
               ],

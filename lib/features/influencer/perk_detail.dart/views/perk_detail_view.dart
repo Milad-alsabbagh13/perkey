@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/styles/colors.dart';
 import 'package:perkey/core/styles/text_styles.dart';
 
 class PerkDetailView extends StatelessWidget {
-  const PerkDetailView({
-    super.key,
-    required this.images,
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.time,
-    required this.location,
-  });
-  final List<String> images;
-  final String title;
-  final String description;
-  final String date;
-  final String time;
-  final String location;
+  const PerkDetailView({super.key, required this.perk});
+  final Map<String, dynamic> perk;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +17,15 @@ class PerkDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyles.styleSemiBold24(context)),
+              Text(
+                perk[DataBaseConstants.kBusinessNameKey],
+                style: TextStyles.styleSemiBold24(context),
+              ),
               SizedBox(height: 12),
               SizedBox(
                 height: 250,
                 child: ListView.builder(
-                  itemCount: images.length,
+                  itemCount: perk[DataBaseConstants.kImagesKey].length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
@@ -46,7 +37,9 @@ class PerkDetailView extends StatelessWidget {
                           color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
-                            image: NetworkImage(images[index]),
+                            image: NetworkImage(
+                              perk[DataBaseConstants.kImagesKey][index],
+                            ),
                             fit: BoxFit.cover,
                           ),
                         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/shared/user_model.dart';
 import 'package:perkey/features/business/views/business_home_view.dart';
-import 'package:perkey/features/home/views/vidoe_view.dart';
+import 'package:perkey/features/home/views/video_view.dart';
 import 'package:perkey/features/influencer/views/influencer_home_view.dart';
 
 void main() async {

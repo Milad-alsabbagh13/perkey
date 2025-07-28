@@ -1,18 +1,17 @@
 import 'dart:developer';
 
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/shared/perk_list.dart';
 import 'package:perkey/core/styles/colors.dart';
 import 'package:perkey/core/styles/text_styles.dart';
-import 'package:perkey/core/widgets/perk_container.dart';
-import 'package:perkey/features/business/views/business_home_view.dart';
+import 'package:perkey/core/widgets/perk_card.dart';
 import 'package:perkey/features/influencer/perk_detail.dart/views/perk_detail_view.dart';
 import 'package:perkey/features/influencer/views/widgets/category_picker_row.dart';
 
 class InfluencerHomeView extends StatefulWidget {
-  InfluencerHomeView({super.key});
+  const InfluencerHomeView({super.key});
 
   @override
   State<InfluencerHomeView> createState() => _InfluencerHomeViewState();
@@ -47,14 +46,13 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
   void chooseCategory(String? cat) {
     selectedPerks = [];
     setState(() {
-      // If 'cat' is null or 'all', show all perks
       if (cat == null || cat == 'All' || cat == '') {
-        selectedPerks = List.from(
-          perks,
-        ); // Create a new list to avoid modifying the original
+        selectedPerks = List.from(allPerkList);
       } else {
-        // Filter the 'perks' list based on the selected category
-        selectedPerks = perks.where((perk) => perk['category'] == cat).toList();
+        selectedPerks =
+            allPerkList
+                .where((perk) => perk[DataBaseConstants.kCategoryKey] == cat)
+                .toList();
       }
       selectedPerksFilter = cat;
     });
@@ -98,18 +96,13 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
                             MaterialPageRoute(
                               builder: (context) {
                                 return PerkDetailView(
-                                  images: selectedPerks[index]['images'],
-                                  title: selectedPerks[index]['title'],
-                                  description: selectedPerks[index]['desc'],
-                                  date: selectedPerks[index]['date'],
-                                  time: selectedPerks[index]['time'],
-                                  location: selectedPerks[index]['location'],
+                                  perk: selectedPerks[index],
                                 );
                               },
                             ),
                           );
                         },
-                        child: PerkContainer(perk: selectedPerks[index]),
+                        child: PerkCard(perk: selectedPerks[index]),
                       ),
                     );
                   },
@@ -119,7 +112,6 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
       ),
       extendBody: true,
       bottomNavigationBar: AnimatedNotchBottomBar(
-        /// Provide NotchBottomBarController
         notchBottomBarController: _notchController,
         color: Colors.white,
         showLabel: true,
@@ -130,7 +122,6 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
 
         notchColor: kPrimaryColor,
 
-        /// restart app if you change removeMargins
         removeMargins: false,
         bottomBarWidth: 500,
         showShadow: false,
