@@ -109,10 +109,7 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
                             ),
                           );
                         },
-                        child: PerkContainer(
-                          title: selectedPerks[index]['title'],
-                          imagePath: selectedPerks[index]['images'][0],
-                        ),
+                        child: PerkContainer(perk: selectedPerks[index]),
                       ),
                     );
                   },

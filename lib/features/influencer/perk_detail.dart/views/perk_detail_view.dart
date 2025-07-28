@@ -23,11 +23,14 @@ class PerkDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: TextStyles.styleSemiBold24(context)),
+              SizedBox(height: 12),
               SizedBox(
                 height: 250,
                 child: ListView.builder(

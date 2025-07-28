@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:perkey/core/styles/colors.dart';
 
 class PerkContainer extends StatelessWidget {
-  const PerkContainer({
-    super.key,
-    this.imagePath =
-        'https://bloximages.chicago2.vip.townnews.com/newjerseyhills.com/content/tncms/assets/v3/editorial/5/06/5067fae5-d78a-5b6b-bec5-93d5d321bd47/6178096a7e11f.image.jpg?resize=750%2C500',
-    this.title = 'Ymca',
-    this.description = 'one swimming lesson at YMCA Madison Nj',
-    this.date = 'Jun 22',
-    this.time = '18:30',
-    this.location = 'Madison, NJ',
-  });
-  final String imagePath;
-  final String title;
-  final String date;
-  final String description;
-  final String time;
-  final String location;
+  const PerkContainer({super.key, required this.perk});
+  final Map<String, dynamic> perk;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +22,7 @@ class PerkContainer extends StatelessWidget {
               color: kPrimaryColor,
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage(imagePath),
+                image: NetworkImage(perk['images'][0]),
                 fit: BoxFit.cover,
               ),
             ),
@@ -54,7 +41,7 @@ class PerkContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      perk['title'],
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -63,8 +50,24 @@ class PerkContainer extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          perk['requirement'] == 'Facebook'
+                              ? 'assets/icons/facebook.svg'
+                              : 'assets/icons/instagram.svg',
+                          width: 20,
+                          height: 20,
+                        ),
+                        Text(
+                          perk['requirement'] == 'instagram'
+                              ? 'Instagram post'
+                              : 'Facebook post',
+                        ),
+                      ],
+                    ),
                     Text(
-                      description,
+                      perk['desc'],
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
@@ -76,9 +79,9 @@ class PerkContainer extends StatelessWidget {
                       MainAxisAlignment
                           .spaceBetween, // Distribute space between elements
                   children: [
-                    _buildInfoChip(Icons.calendar_today, date),
-                    _buildInfoChip(Icons.access_time, time),
-                    _buildInfoChip(Icons.location_on, location),
+                    _buildInfoChip(Icons.calendar_today, perk['date']),
+                    _buildInfoChip(Icons.access_time, perk['time']),
+                    _buildInfoChip(Icons.location_on, perk['location']),
                   ],
                 ),
               ],

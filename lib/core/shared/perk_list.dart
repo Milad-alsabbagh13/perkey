@@ -9,6 +9,7 @@ const List<Map<String, dynamic>> perks = [
       'https://bloximages.chicago2.vip.townnews.com/newjerseyhills.com/content/tncms/assets/v3/editorial/5/06/5067fae5-d78a-5b6b-bec5-93d5d321bd47/6178096a7e11f.image.jpg?resize=750%2C500',
       'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0b/75/fb/34/restaurant.jpg',
     ],
+    'requirement': 'instagram',
     'location': 'Madison',
     'date': 'Jul 29',
     'time': '19:23',
@@ -25,6 +26,7 @@ const List<Map<String, dynamic>> perks = [
     'location': 'Madison',
     'date': 'Jul 29',
     'time': '19:23',
+    'requirement': 'instagram',
   },
   {
     'PerkId': 32,
@@ -38,5 +40,6 @@ const List<Map<String, dynamic>> perks = [
     'location': 'Madison',
     'date': 'Jul 29',
     'time': '19:23',
+    'requirement': 'facebook',
   },
 ];

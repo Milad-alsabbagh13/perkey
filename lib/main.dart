@@ -8,12 +8,8 @@ import 'package:perkey/features/influencer/views/influencer_home_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize user info
   await UserInfo().init();
-
-  // Decide start page
   late Widget homePage;
-
   if (UserInfo().isLoggedIn) {
     if (UserInfo().type == SharedPreferencesConstants.kInfluencerValue) {
       homePage = InfluencerHomeView();
