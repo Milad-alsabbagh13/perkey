@@ -25,4 +25,4 @@ abstract class DataBaseConstants {
 // TODO work with navigation animation 
 // TODO add requirement in perk cards 
 // TODO change photo viewer to something fancy
-
+// Todo define character limit to perk description

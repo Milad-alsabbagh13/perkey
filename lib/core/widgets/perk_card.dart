@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:perkey/core/constants.dart';
 import 'package:perkey/core/styles/colors.dart';
+import 'package:perkey/core/widgets/build_info_chip.dart';
 
 class PerkCard extends StatelessWidget {
   const PerkCard({super.key, required this.perk});
@@ -90,15 +91,15 @@ class PerkCard extends StatelessWidget {
                       MainAxisAlignment
                           .spaceBetween, // Distribute space between elements
                   children: [
-                    _buildInfoChip(
+                    buildInfoChip(
                       Icons.calendar_today,
                       perk[DataBaseConstants.kDateKey],
                     ),
-                    _buildInfoChip(
+                    buildInfoChip(
                       Icons.access_time,
                       perk[DataBaseConstants.kTimeKey],
                     ),
-                    _buildInfoChip(
+                    buildInfoChip(
                       Icons.location_on,
                       perk[DataBaseConstants.kLocationKey],
                     ),
@@ -111,30 +112,4 @@ class PerkCard extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildInfoChip(IconData icon, String text) {
-  return Expanded(
-    // Use Expanded to make sure each chip takes equal space in the row
-    child: Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 2.0,
-      ), // Small horizontal padding
-      child: Column(
-        // Use a column to stack icon and text if needed, or a Row if side-by-side
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 18, color: Colors.blueGrey),
-          const SizedBox(height: 2),
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 10, color: Colors.black54),
-            maxLines: 1, // Ensure date/time/location don't wrap too much
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    ),
-  );
 }

@@ -32,13 +32,12 @@ class _InfluencerHomeViewState extends State<InfluencerHomeView> {
   void _handleIndexChanged(int index) {
     log(index.toString());
     setState(() {
-      _currentIndex = index; // Update the state with the new index
+      _currentIndex = index;
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     chooseCategory(selectedPerksFilter);
   }
